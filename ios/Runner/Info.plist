@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need acess to your gellary to select a photo for face recognition</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need acess to your camera to select a photo for face recognition</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need acess to your microphone to enter a voice for voice recognition</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
