@@ -36,7 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final ImagePicker picker = ImagePicker();
 
   chooseImage() async {
-    // Pick an image.
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
@@ -45,7 +44,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  captureImage() {}
+  captureImage() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
