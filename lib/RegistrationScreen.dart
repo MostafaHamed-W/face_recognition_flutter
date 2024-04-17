@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
-
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -14,12 +15,13 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<RegistrationScreen> {
+  late FaceDetector faceDetector;
+
   //TODO declare variables
   late ImagePicker imagePicker;
   File? _image;
 
   //TODO declare detector
-
 
   //TODO declare face recognizer
 
@@ -30,18 +32,19 @@ class _HomePageState extends State<RegistrationScreen> {
     imagePicker = ImagePicker();
 
     //TODO initialize face detector
-
-
+    final options = FaceDetectorOptions(
+      performanceMode: FaceDetectorMode.accurate,
+    );
+    faceDetector = FaceDetector(options: options);
 
     //TODO initialize face recognizer
-
   }
 
   //TODO capture image using camera
   _imgFromCamera() async {
     XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      setState((){
+      setState(() {
         _image = File(pickedFile.path);
         doFaceDetection();
       });
@@ -50,10 +53,9 @@ class _HomePageState extends State<RegistrationScreen> {
 
   //TODO choose image using gallery
   _imgFromGallery() async {
-    XFile? pickedFile =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+    XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState((){
+      setState(() {
         _image = File(pickedFile.path);
         doFaceDetection();
       });
@@ -65,11 +67,41 @@ class _HomePageState extends State<RegistrationScreen> {
   doFaceDetection() async {
     //TODO remove rotation of camera images
 
-
     //TODO passing input to face detector and getting detected faces
-
+    final InputImage inputImage;
+    inputImage = InputImage.fromFile(_image!);
 
     //TODO call the method to perform face recognition on detected faces
+    final List<Face> faces = await faceDetector.processImage(inputImage);
+
+    for (Face face in faces) {
+      final Rect boundingBox = face.boundingBox;
+      print('Face Position = ${boundingBox.toString()}');
+
+      // Aditional options
+      /**
+      final double? rotX = face.headEulerAngleX; // Head is tilted up and down rotX degrees
+      final double? rotY = face.headEulerAngleY; // Head is rotated to the right rotY degrees
+      final double? rotZ = face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
+
+      // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
+      // eyes, cheeks, and nose available):
+      final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
+      if (leftEar != null) {
+        final Point<int> leftEarPos = leftEar.position;
+      }
+
+      // If classification was enabled with FaceDetectorOptions:
+      if (face.smilingProbability != null) {
+        final double? smileProb = face.smilingProbability;
+      }
+
+      // If face tracking was enabled with FaceDetectorOptions:
+      if (face.trackingId != null) {
+        final int? id = face.trackingId;
+      }
+     **/
+    }
   }
 
   //TODO remove rotation of camera images
@@ -145,8 +177,7 @@ class _HomePageState extends State<RegistrationScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _image != null
-              ?
-          Container(
+              ? Container(
                   margin: const EdgeInsets.only(top: 100),
                   width: screenWidth - 50,
                   height: screenWidth - 50,
@@ -186,8 +217,7 @@ class _HomePageState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(200))),
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
                       _imgFromGallery();
@@ -195,14 +225,12 @@ class _HomePageState extends State<RegistrationScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.image,
-                          color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.image, color: Colors.blue, size: screenWidth / 7),
                     ),
                   ),
                 ),
                 Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(200))),
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
                       _imgFromCamera();
@@ -210,8 +238,7 @@ class _HomePageState extends State<RegistrationScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.camera,
-                          color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.camera, color: Colors.blue, size: screenWidth / 7),
                     ),
                   ),
                 )
