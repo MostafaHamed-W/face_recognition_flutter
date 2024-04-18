@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +21,7 @@ class _HomePageState extends State<RegistrationScreen> {
   //TODO declare variables
   late ImagePicker imagePicker;
   File? _image;
+  dynamic croppedImage;
 
   //TODO declare detector
 
@@ -69,18 +71,47 @@ class _HomePageState extends State<RegistrationScreen> {
   doFaceDetection() async {
     //TODO remove rotation of camera images
 
-    //TODO passing input to face detector and getting detected faces
+    //passing input to face detector and getting detected faces
     final InputImage inputImage;
     inputImage = InputImage.fromFile(_image!);
 
-    //TODO call the method to perform face recognition on detected faces
+    //call the method to perform face recognition on detected faces
     faces = await faceDetector.processImage(inputImage);
+
+    // Convert the image to Image format
+    image = await _image?.readAsBytes();
+    image = await decodeImageFromList(image);
 
     for (Face face in faces) {
       final Rect boundingBox = face.boundingBox;
       print('Face Position = ${boundingBox.toString()}');
-      // Aditional options
-      /**
+
+      // Cropping the face
+
+      // 0- Get the needed variables
+      final top = boundingBox.top < 0 ? 0 : boundingBox.top;
+      final left = boundingBox.left < 0 ? 0 : boundingBox.left;
+      final bottom = boundingBox.bottom > image.height ? image.height - 1 : boundingBox.bottom;
+      final right = boundingBox.right > image.width ? image.width - 1 : boundingBox.right;
+
+      final width = right - left;
+      final height = bottom - top;
+
+      // 1- Convert image to IMG type
+      final bytes = _image!.readAsBytesSync();
+      img.Image? faceImage = img.decodeImage(bytes);
+      // 2- Crop image
+      final croppedFace =
+          img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
+
+      setState(() {
+        croppedImage = croppedFace;
+      });
+    }
+    drawRectangleAroundFaces();
+  }
+
+  /* Aditional options
       final double? rotX = face.headEulerAngleX; // Head is tilted up and down rotX degrees
       final double? rotY = face.headEulerAngleY; // Head is rotated to the right rotY degrees
       final double? rotZ = face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
@@ -100,11 +131,8 @@ class _HomePageState extends State<RegistrationScreen> {
       // If face tracking was enabled with FaceDetectorOptions:
       if (face.trackingId != null) {
         final int? id = face.trackingId;
-      }
-     **/
-    }
-    drawRectangleAroundFaces();
-  }
+      }  
+*/
 
   //TODO remove rotation of camera images
   removeRotation(File inputImage) async {
@@ -160,8 +188,6 @@ class _HomePageState extends State<RegistrationScreen> {
   //TODO draw rectangles
   var image;
   drawRectangleAroundFaces() async {
-    image = await _image?.readAsBytes();
-    image = await decodeImageFromList(image);
     print("${image.width}   ${image.height}");
     setState(() {
       image;
@@ -173,12 +199,13 @@ class _HomePageState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          image != null
+          image != null && croppedImage != null
               ?
               // Container(
               //     margin: const EdgeInsets.only(top: 100),
@@ -186,17 +213,26 @@ class _HomePageState extends State<RegistrationScreen> {
               //     height: screenWidth - 50,
               //     child: Image.file(_image!),
               //   )
-              Container(
-                  margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
-                  child: FittedBox(
-                    child: SizedBox(
-                      width: image.width.toDouble(),
-                      height: image.width.toDouble(),
-                      child: CustomPaint(
-                        painter: FacePainter(facesList: faces, imageFile: image),
+              Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
+                      child: FittedBox(
+                        child: SizedBox(
+                          width: image.width.toDouble(),
+                          height: image.width.toDouble(),
+                          child: CustomPaint(
+                            painter: FacePainter(facesList: faces, imageFile: image),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Image.memory(img.encodePng(croppedImage)),
+                    )
+                  ],
                 )
               : Container(
                   margin: const EdgeInsets.only(top: 100),
@@ -266,7 +302,7 @@ class FacePainter extends CustomPainter {
     Paint p = Paint();
     p.color = Colors.red;
     p.style = PaintingStyle.stroke;
-    p.strokeWidth = 4;
+    p.strokeWidth = 10;
 
     for (Face face in facesList) {
       canvas.drawRect(face.boundingBox, p);
