@@ -21,7 +21,6 @@ class _HomePageState extends State<RegistrationScreen> {
   //TODO declare variables
   late ImagePicker imagePicker;
   File? _image;
-  dynamic croppedImage;
 
   //TODO declare detector
 
@@ -103,10 +102,6 @@ class _HomePageState extends State<RegistrationScreen> {
       // 2- Crop image
       final croppedFace =
           img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
-
-      setState(() {
-        croppedImage = croppedFace;
-      });
     }
     drawRectangleAroundFaces();
   }
@@ -205,7 +200,7 @@ class _HomePageState extends State<RegistrationScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          image != null && croppedImage != null
+          image != null
               ?
               // Container(
               //     margin: const EdgeInsets.only(top: 100),
@@ -213,26 +208,17 @@ class _HomePageState extends State<RegistrationScreen> {
               //     height: screenWidth - 50,
               //     child: Image.file(_image!),
               //   )
-              Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
-                      child: FittedBox(
-                        child: SizedBox(
-                          width: image.width.toDouble(),
-                          height: image.width.toDouble(),
-                          child: CustomPaint(
-                            painter: FacePainter(facesList: faces, imageFile: image),
-                          ),
-                        ),
+              Container(
+                  margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
+                  child: FittedBox(
+                    child: SizedBox(
+                      width: image.width.toDouble(),
+                      height: image.width.toDouble(),
+                      child: CustomPaint(
+                        painter: FacePainter(facesList: faces, imageFile: image),
                       ),
                     ),
-                    SizedBox(
-                      height: 200,
-                      width: 200,
-                      child: Image.memory(img.encodePng(croppedImage)),
-                    )
-                  ],
+                  ),
                 )
               : Container(
                   margin: const EdgeInsets.only(top: 100),
