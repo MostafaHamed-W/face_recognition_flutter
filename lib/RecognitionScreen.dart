@@ -24,6 +24,9 @@ class _HomePageState extends State<RecognitionScreen> {
   late ImagePicker imagePicker;
   File? _image;
 
+  dynamic croppedImage;
+  late Recognition recognition;
+
   //TODO declare detector
 
   //TODO declare face recognizer
@@ -105,7 +108,13 @@ class _HomePageState extends State<RecognitionScreen> {
       // 2- Crop image
       final croppedFace =
           img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
-      Recognition recognition = recognizer.recognize(croppedFace, boundingBox);
+
+      recognition = recognizer.recognize(croppedFace, boundingBox);
+
+      setState(() {
+        croppedImage = croppedFace;
+        recognition;
+      });
       // print('Face embedding = ${recognition.embeddings}');
       print("Recognized face is ${recognition.name}'s face");
       // showFaceRegistrationDialogue(Uint8List.fromList(img.encodeBmp(croppedFace)), recognition);
@@ -222,17 +231,43 @@ class _HomePageState extends State<RecognitionScreen> {
               //     height: screenWidth - 50,
               //     child: Image.file(_image!),
               //   )
-              Container(
-                  margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
-                  child: FittedBox(
-                    child: SizedBox(
-                      width: image.width.toDouble(),
-                      height: image.width.toDouble(),
-                      child: CustomPaint(
-                        painter: FacePainter(facesList: faces, imageFile: image),
-                      ),
-                    ),
-                  ),
+              Column(
+                  children: [
+                    croppedImage != null && recognition != null
+                        ? Column(
+                            children: [
+                              const SizedBox(height: 100),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 0),
+                                  child: Image.memory(
+                                    img.encodePng(croppedImage),
+                                    width: 200,
+                                    height: 200,
+                                  )
+
+                                  //  FittedBox(
+                                  //   child: SizedBox(
+                                  //     width: image.width.toDouble(),
+                                  //     height: image.width.toDouble(),
+                                  //     child: CustomPaint(
+                                  //       painter: FacePainter(facesList: faces, imageFile: image),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  ),
+                              const SizedBox(height: 30),
+                              Text(
+                                "This face is ${recognition.name}'s face!",
+                                style: const TextStyle(fontSize: 25),
+                              ),
+                              Text(
+                                "Different is ${double.parse(recognition.distance.toStringAsFixed(2))}",
+                                style: const TextStyle(fontSize: 25),
+                              )
+                            ],
+                          )
+                        : const SizedBox()
+                  ],
                 )
               : Container(
                   margin: const EdgeInsets.only(top: 100),
