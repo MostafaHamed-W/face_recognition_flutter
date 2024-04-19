@@ -177,7 +177,7 @@ class _HomePageState extends State<RegistrationScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    recognizer.registerFaceInDB(textEditingController.text, recognition.embeddings.toString());
+                    recognizer.registerFaceInDB(textEditingController.text, recognition.embeddings);
                     textEditingController.text = "";
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
