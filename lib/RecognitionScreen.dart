@@ -309,6 +309,13 @@ class FacePainter extends CustomPainter {
 
     for (Recognition recognition in recognitionsList) {
       canvas.drawRect(recognition.location, p);
+
+      TextSpan textSpan = TextSpan(
+          text: recognition.name,
+          style: const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold));
+      TextPainter textPainter = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
+      textPainter.layout();
+      textPainter.paint(canvas, Offset(recognition.location.left, recognition.location.top - 50));
     }
   }
 
