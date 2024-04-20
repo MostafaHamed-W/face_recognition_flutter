@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:face_recognition/ML/Recognition.dart';
 import 'package:face_recognition/ML/Recognizer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
@@ -26,7 +25,6 @@ class _HomePageState extends State<RecognitionScreen> {
   File? _image;
 
   dynamic croppedImage;
-  late Recognition recognition;
 
   //TODO declare detector
 
@@ -72,6 +70,7 @@ class _HomePageState extends State<RecognitionScreen> {
   }
 
   List<Face> faces = [];
+  List<Recognition> recognitions = [];
 
   //TODO face detection code here
 
@@ -110,12 +109,9 @@ class _HomePageState extends State<RecognitionScreen> {
       final croppedFace =
           img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
 
-      recognition = recognizer.recognize(croppedFace, boundingBox);
+      final recognition = recognizer.recognize(croppedFace, boundingBox);
+      recognitions.add(recognition);
 
-      setState(() {
-        croppedImage = croppedFace;
-        recognition;
-      });
       // print('Face embedding = ${recognition.embeddings}');
       print("Recognized face is ${recognition.name}'s face");
       // showFaceRegistrationDialogue(Uint8List.fromList(img.encodeBmp(croppedFace)), recognition);
@@ -210,7 +206,7 @@ class _HomePageState extends State<RecognitionScreen> {
     print("${image.width}   ${image.height}");
     setState(() {
       image;
-      faces;
+      recognitions;
     });
   }
 
@@ -221,111 +217,84 @@ class _HomePageState extends State<RecognitionScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            image != null
-                ?
-                // Container(
-                //     margin: const EdgeInsets.only(top: 100),
-                //     width: screenWidth - 50,
-                //     height: screenWidth - 50,
-                //     child: Image.file(_image!),
-                //   )
-                Column(
-                    children: [
-                      croppedImage != null && recognition != null
-                          ? Column(
-                              children: [
-                                FittedBox(
-                                  child: SizedBox(
-                                    width: image.width.toDouble(),
-                                    height: image.width.toDouble(),
-                                    child: CustomPaint(
-                                      painter: FacePainter(facesList: faces, imageFile: image),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    child: Image.memory(
-                                  img.encodePng(croppedImage),
-                                  width: 200,
-                                  height: 200,
-                                )),
-                                const SizedBox(height: 10),
-                                Text(
-                                  "This face is ${recognition.name}'s face!",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  "Distance from original photo is ${double.parse(recognition.distance.toStringAsFixed(2))}",
-                                  style: const TextStyle(fontSize: 20),
-                                )
-                              ],
-                            )
-                          : const SizedBox()
-                    ],
-                  )
-                : Container(
-                    margin: const EdgeInsets.only(top: 100),
-                    child: Image.asset(
-                      "images/logo.png",
-                      width: screenWidth - 100,
-                      height: screenWidth - 100,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          image != null
+              ?
+              // Container(
+              //     margin: const EdgeInsets.only(top: 100),
+              //     width: screenWidth - 50,
+              //     height: screenWidth - 50,
+              //     child: Image.file(_image!),
+              //   )
+              FittedBox(
+                  child: SizedBox(
+                    width: image.width.toDouble(),
+                    height: image.width.toDouble(),
+                    child: CustomPaint(
+                      painter: FacePainter(recognitionsList: recognitions, imageFile: image),
                     ),
                   ),
+                )
+              : Container(
+                  margin: const EdgeInsets.only(top: 100),
+                  child: Image.asset(
+                    "images/logo.png",
+                    width: screenWidth - 100,
+                    height: screenWidth - 100,
+                  ),
+                ),
 
-            Container(
-              height: 50,
+          Container(
+            height: 50,
+          ),
+
+          //TODO section which displays buttons for choosing and capturing images
+          Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
+                  child: InkWell(
+                    onTap: () {
+                      _imgFromGallery();
+                    },
+                    child: SizedBox(
+                      width: screenWidth / 2 - 70,
+                      height: screenWidth / 2 - 70,
+                      child: Icon(Icons.image, color: Colors.blue, size: screenWidth / 7),
+                    ),
+                  ),
+                ),
+                Card(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
+                  child: InkWell(
+                    onTap: () {
+                      _imgFromCamera();
+                    },
+                    child: SizedBox(
+                      width: screenWidth / 2 - 70,
+                      height: screenWidth / 2 - 70,
+                      child: Icon(Icons.camera, color: Colors.blue, size: screenWidth / 7),
+                    ),
+                  ),
+                )
+              ],
             ),
-
-            //TODO section which displays buttons for choosing and capturing images
-            Container(
-              margin: const EdgeInsets.only(bottom: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Card(
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
-                    child: InkWell(
-                      onTap: () {
-                        _imgFromGallery();
-                      },
-                      child: SizedBox(
-                        width: screenWidth / 2 - 70,
-                        height: screenWidth / 2 - 70,
-                        child: Icon(Icons.image, color: Colors.blue, size: screenWidth / 7),
-                      ),
-                    ),
-                  ),
-                  Card(
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
-                    child: InkWell(
-                      onTap: () {
-                        _imgFromCamera();
-                      },
-                      child: SizedBox(
-                        width: screenWidth / 2 - 70,
-                        height: screenWidth / 2 - 70,
-                        child: Icon(Icons.camera, color: Colors.blue, size: screenWidth / 7),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
 }
 
 class FacePainter extends CustomPainter {
-  List<Face> facesList;
+  List<Recognition> recognitionsList;
   dynamic imageFile;
-  FacePainter({required this.facesList, @required this.imageFile});
+  FacePainter({required this.recognitionsList, @required this.imageFile});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -338,8 +307,8 @@ class FacePainter extends CustomPainter {
     p.style = PaintingStyle.stroke;
     p.strokeWidth = 10;
 
-    for (Face face in facesList) {
-      canvas.drawRect(face.boundingBox, p);
+    for (Recognition recognition in recognitionsList) {
+      canvas.drawRect(recognition.location, p);
     }
   }
 
