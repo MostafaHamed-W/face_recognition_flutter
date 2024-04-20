@@ -75,6 +75,7 @@ class _HomePageState extends State<RecognitionScreen> {
   //TODO face detection code here
 
   doFaceDetection() async {
+    recognitions.clear();
     //TODO remove rotation of camera images
 
     //passing input to face detector and getting detected faces
@@ -108,8 +109,10 @@ class _HomePageState extends State<RecognitionScreen> {
       // 2- Crop image
       final croppedFace =
           img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
-
       final recognition = recognizer.recognize(croppedFace, boundingBox);
+      if (recognition.distance > 1.2) {
+        recognition.name = "UnKnown";
+      }
       recognitions.add(recognition);
 
       // print('Face embedding = ${recognition.embeddings}');
@@ -233,7 +236,7 @@ class _HomePageState extends State<RecognitionScreen> {
                     width: image.width.toDouble(),
                     height: image.width.toDouble(),
                     child: CustomPaint(
-                      painter: FacePainter(recognitionsList: recognitions, imageFile: image),
+                      painter: FacePainter(faceList: recognitions, imageFile: image),
                     ),
                   ),
                 )
@@ -292,9 +295,9 @@ class _HomePageState extends State<RecognitionScreen> {
 }
 
 class FacePainter extends CustomPainter {
-  List<Recognition> recognitionsList;
+  List<Recognition> faceList;
   dynamic imageFile;
-  FacePainter({required this.recognitionsList, @required this.imageFile});
+  FacePainter({required this.faceList, @required this.imageFile});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -307,15 +310,15 @@ class FacePainter extends CustomPainter {
     p.style = PaintingStyle.stroke;
     p.strokeWidth = 10;
 
-    for (Recognition recognition in recognitionsList) {
-      canvas.drawRect(recognition.location, p);
+    for (Recognition face in faceList) {
+      canvas.drawRect(face.location, p);
 
       TextSpan textSpan = TextSpan(
-          text: recognition.name,
+          text: "${face.name}, ${double.parse(face.distance.toStringAsFixed(2))}",
           style: const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold));
       TextPainter textPainter = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
       textPainter.layout();
-      textPainter.paint(canvas, Offset(recognition.location.left, recognition.location.top - 50));
+      textPainter.paint(canvas, Offset(face.location.left, face.location.top - 50));
     }
   }
 
