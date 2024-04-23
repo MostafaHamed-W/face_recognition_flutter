@@ -14,6 +14,9 @@ class Recognizer {
   static const int HEIGHT = 112;
   final dbHelper = DatabaseHelper();
   Map<String, Recognition> registered = Map();
+
+  //TODO: if we want to use face_net model we can pass it's name to modelName variable
+
   @override
   String get modelName => 'assets/mobile_face_net.tflite';
 
@@ -55,7 +58,7 @@ class Recognizer {
 
   Future<void> loadModel() async {
     try {
-      interpreter = await Interpreter.fromAsset(modelName);
+      interpreter = await Interpreter.fromAsset(modelName, options: _interpreterOptions);
     } catch (e) {
       print('Unable to create interpreter, Caught Exception: ${e.toString()}');
     }
