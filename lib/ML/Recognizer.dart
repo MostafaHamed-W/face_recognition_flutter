@@ -26,7 +26,10 @@ class Recognizer {
     if (numThreads != null) {
       _interpreterOptions.threads = numThreads;
     }
+    // Loading tensorflow model
     loadModel();
+
+    // Initialize database
     initDB();
   }
 
@@ -64,6 +67,7 @@ class Recognizer {
     }
   }
 
+  // This message converts the image to an array
   List<dynamic> imageToArray(img.Image inputImage) {
     img.Image resizedImage = img.copyResize(inputImage!, width: WIDTH, height: HEIGHT);
     List<double> flattenedList = resizedImage.data!
@@ -86,7 +90,10 @@ class Recognizer {
     return reshapedArray.reshape([1, 112, 112, 3]);
   }
 
+  // We pass the cropped face to this image and the location Rect obj and get recognition object with return output
   Recognition recognize(img.Image image, Rect location) {
+    // Output and input array due to model
+    // Check model inputs & outputs in netron website
     //TODO crop face from image resize it and convert it to float array
     var input = imageToArray(image);
     print(input.shape.toString());
@@ -100,9 +107,11 @@ class Recognizer {
     final run = DateTime.now().millisecondsSinceEpoch - runs;
     print('Time to run inference: $run ms$output');
 
+    // The first item in output list with is [1,192] 1 row and 192 columns, we are getting the 192 columns array
     //TODO convert dynamic list to double list
     List<double> outputArray = output.first.cast<double>();
 
+    // This takes the output from the
     //TODO looks for the nearest embeeding in the database and returns the pair
     Pair pair = findNearest(outputArray);
     print("distance= ${pair.distance}");
