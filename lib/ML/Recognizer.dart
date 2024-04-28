@@ -10,15 +10,15 @@ import 'Recognition.dart';
 class Recognizer {
   late Interpreter interpreter;
   late InterpreterOptions _interpreterOptions;
-  static const int WIDTH = 112;
-  static const int HEIGHT = 112;
+  static const int WIDTH = 160;
+  static const int HEIGHT = 160;
   final dbHelper = DatabaseHelper();
   Map<String, Recognition> registered = Map();
 
   //TODO: if we want to use face_net model we can pass it's name to modelName variable
 
   @override
-  String get modelName => 'assets/mobile_face_net.tflite';
+  String get modelName => 'assets/facenet.tflite';
 
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
@@ -45,6 +45,7 @@ class Recognizer {
       //  debugPrint(row.toString());
       print(row[DatabaseHelper.columnName]);
       String name = row[DatabaseHelper.columnName];
+      // Converting the embedings from String as it stored in db to array of double(the correct form of embeddings)
       List<double> embd =
           row[DatabaseHelper.columnEmbedding].split(',').map((e) => double.parse(e)).toList().cast<double>();
       Recognition recognition = Recognition(row[DatabaseHelper.columnName], Rect.zero, embd, 0);
@@ -87,7 +88,7 @@ class Recognizer {
         }
       }
     }
-    return reshapedArray.reshape([1, 112, 112, 3]);
+    return reshapedArray.reshape([1, 160, 160, 3]);
   }
 
   // We pass the cropped face to this image and the location Rect obj and get recognition object with return output
@@ -99,7 +100,7 @@ class Recognizer {
     print(input.shape.toString());
 
     //TODO output array
-    List output = List.filled(1 * 192, 0).reshape([1, 192]);
+    List output = List.filled(1 * 512, 0).reshape([1, 512]);
 
     //TODO performs inference
     final runs = DateTime.now().millisecondsSinceEpoch;
