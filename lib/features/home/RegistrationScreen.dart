@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:face_recognition/ML/Recognition.dart';
-import 'package:face_recognition/ML/Recognizer.dart';
+import 'package:face_recognition/core/ML/Recognition.dart';
+import 'package:face_recognition/core/ML/Recognizer.dart';
+import 'package:face_recognition/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
@@ -210,6 +211,7 @@ class _HomePageState extends State<RegistrationScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: const Color(0xff101018),
       resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -237,7 +239,7 @@ class _HomePageState extends State<RegistrationScreen> {
               : Container(
                   margin: const EdgeInsets.only(top: 100),
                   child: Image.asset(
-                    "images/logo.png",
+                    "assets/images/logo.png",
                     width: screenWidth - 100,
                     height: screenWidth - 100,
                   ),
@@ -254,6 +256,7 @@ class _HomePageState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Card(
+                  color: ColorsManager.secondBlueColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -262,11 +265,12 @@ class _HomePageState extends State<RegistrationScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.image, color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.image, color: Colors.white, size: screenWidth / 7),
                     ),
                   ),
                 ),
                 Card(
+                  color: ColorsManager.secondBlueColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -275,7 +279,7 @@ class _HomePageState extends State<RegistrationScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.camera, color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.camera, color: Colors.white, size: screenWidth / 7),
                     ),
                   ),
                 )

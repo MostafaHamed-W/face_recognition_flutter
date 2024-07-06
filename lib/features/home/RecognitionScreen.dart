@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:face_recognition/ML/Recognition.dart';
-import 'package:face_recognition/ML/Recognizer.dart';
+import 'package:face_recognition/core/ML/Recognition.dart';
+import 'package:face_recognition/core/ML/Recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
@@ -219,6 +219,7 @@ class _HomePageState extends State<RecognitionScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: const Color(0xff101018),
       resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -243,7 +244,7 @@ class _HomePageState extends State<RecognitionScreen> {
               : Container(
                   margin: const EdgeInsets.only(top: 100),
                   child: Image.asset(
-                    "images/logo.png",
+                    "assets/images/logo.png",
                     width: screenWidth - 100,
                     height: screenWidth - 100,
                   ),

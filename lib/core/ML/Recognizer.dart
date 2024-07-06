@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
-import '../DB/DatabaseHelper.dart';
-import '../HomeScreen.dart';
+import '../../DB/DatabaseHelper.dart';
+import '../../features/home/HomeScreen.dart';
 import 'Recognition.dart';
 
 class Recognizer {
@@ -18,7 +18,7 @@ class Recognizer {
   //TODO: if we want to use face_net model we can pass it's name to modelName variable
 
   @override
-  String get modelName => 'assets/facenet.tflite';
+  String get modelName => 'assets/ml_models/facenet.tflite';
 
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
