@@ -1,0 +1,7 @@
+flutter_native_splash:
+  ## iOS & Android below 12
+  color: "#101018"
+  image: assets/images/face_guard_splash.png
+
+
+  android_12:
