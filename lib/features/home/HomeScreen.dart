@@ -1,12 +1,12 @@
-import 'package:face_recognition/core/colors/colors.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
+import 'package:face_recognition/core/theming/colors.dart';
+import 'package:face_recognition/core/theming/styles.dart';
+import 'package:flutter/material.dart';
 import 'RecognitionScreen.dart';
 import 'RegistrationScreen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomePageState();
 }
@@ -17,6 +17,10 @@ class _HomePageState extends State<HomeScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title:  Text('FaceGuard',style: TextStyles.font22WhiteSemiBold,),
+        backgroundColor: ColorsManager.thirddBlueColor,
+      ),
       backgroundColor: const Color(0xff101018),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +41,7 @@ class _HomePageState extends State<HomeScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorsManager.secondBlueColor,
+                    backgroundColor: ColorsManager.thirddBlueColor,
                     minimumSize: Size(screenWidth - 30, 50),
                   ),
                   child: const Text(
@@ -55,7 +59,7 @@ class _HomePageState extends State<HomeScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const RecognitionScreen()));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorsManager.secondBlueColor,
+                    backgroundColor: ColorsManager.thirddBlueColor,
                     minimumSize: Size(screenWidth - 30, 50),
                   ),
                   child: const Text(

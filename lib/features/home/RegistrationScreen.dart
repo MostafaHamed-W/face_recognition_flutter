@@ -3,7 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:face_recognition/core/ML/Recognition.dart';
 import 'package:face_recognition/core/ML/Recognizer.dart';
-import 'package:face_recognition/core/colors/colors.dart';
+import 'package:face_recognition/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
@@ -256,7 +256,7 @@ class _HomePageState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Card(
-                  color: ColorsManager.secondBlueColor,
+                  color: ColorsManager.thirddBlueColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -270,7 +270,7 @@ class _HomePageState extends State<RegistrationScreen> {
                   ),
                 ),
                 Card(
-                  color: ColorsManager.secondBlueColor,
+                  color: ColorsManager.thirddBlueColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {

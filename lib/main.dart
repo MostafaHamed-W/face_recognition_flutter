@@ -7,6 +7,7 @@ void main() async {
   // _cameras = await availableCameras();
   runApp(
     const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     ),
     // const CameraApp(),
