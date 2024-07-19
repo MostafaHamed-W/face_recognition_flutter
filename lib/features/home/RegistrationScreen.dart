@@ -19,17 +19,15 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<RegistrationScreen> {
-  late FaceDetector faceDetector;
-
   //TODO declare variables
   late ImagePicker imagePicker;
   File? _image;
 
   //TODO declare detector
+  late FaceDetector faceDetector;
 
   //TODO declare face recognizer
   late Recognizer recognizer;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -37,10 +35,9 @@ class _HomePageState extends State<RegistrationScreen> {
     imagePicker = ImagePicker();
 
     //TODO initialize face detector
-    final options = FaceDetectorOptions(
-      performanceMode: FaceDetectorMode.accurate,
-    );
+    final options = FaceDetectorOptions();
     faceDetector = FaceDetector(options: options);
+
 
     //TODO initialize face recognizer
     recognizer = Recognizer();
@@ -68,74 +65,40 @@ class _HomePageState extends State<RegistrationScreen> {
     }
   }
 
-  List<Face> faces = [];
-
   //TODO face detection code here
-
+  List<Face> faces = [];
   doFaceDetection() async {
     //TODO remove rotation of camera images
+    _image = await removeRotation(_image!);
 
-    //passing input to face detector and getting detected faces
-    final InputImage inputImage;
-    inputImage = InputImage.fromFile(_image!);
+    image = await _image?.readAsBytes();
+    image = await decodeImageFromList(image);
 
-    //call the method to perform face recognition on detected faces
+    //TODO passing input to face detector and getting detected faces
+    InputImage inputImage = InputImage.fromFile(_image!);
     faces = await faceDetector.processImage(inputImage);
-
-    // Convert the image to Image format
-    image = await decodeImageFromList(_image!.readAsBytesSync());
-
     for (Face face in faces) {
-      final Rect boundingBox = face.boundingBox;
-      print('Face Position = ${boundingBox.toString()}');
+      Rect faceRect = face.boundingBox;
+      num left = faceRect.left < 0 ? 0 : faceRect.left;
+      num top = faceRect.top < 0 ? 0 : faceRect.top;
+      num right = faceRect.right > image.width ? image.width - 1 : faceRect.right;
+      num bottom = faceRect.bottom > image.height ? image.height - 1 : faceRect.bottom;
+      num width = right - left;
+      num height = bottom - top;
 
-      // Cropping the face
+      //TODO crop face
+      final bytes = _image!.readAsBytesSync(); //await File(cropedFace!.path).readAsBytes();
+      img.Image? faceImg = img.decodeImage(bytes!);
+      img.Image faceImg2 =
+          img.copyCrop(faceImg!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
 
-      // 0- Get the needed variables
-      final top = boundingBox.top < 0 ? 0 : boundingBox.top;
-      final left = boundingBox.left < 0 ? 0 : boundingBox.left;
-      final bottom = boundingBox.bottom > image.height ? image.height - 1 : boundingBox.bottom;
-      final right = boundingBox.right > image.width ? image.width - 1 : boundingBox.right;
-
-      final width = right - left;
-      final height = bottom - top;
-
-      // 1- Convert image to IMG type
-      final bytes = _image!.readAsBytesSync();
-      img.Image? faceImage = img.decodeImage(bytes);
-      // 2- Crop image
-      final croppedFace =
-          img.copyCrop(faceImage!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
-      Recognition recognition = recognizer.recognize(croppedFace, boundingBox);
-      // print('Face embedding = ${recognition.embeddings}');
-
-      showFaceRegistrationDialogue(Uint8List.fromList(img.encodeBmp(croppedFace)), recognition);
+      Recognition recognition = recognizer.recognize(faceImg2, faceRect);
+      showFaceRegistrationDialogue(Uint8List.fromList(img.encodeBmp(faceImg2)), recognition);
     }
     drawRectangleAroundFaces();
+
+    //TODO call the method to perform face recognition on detected faces
   }
-
-  /* Aditional options
-      final double? rotX = face.headEulerAngleX; // Head is tilted up and down rotX degrees
-      final double? rotY = face.headEulerAngleY; // Head is rotated to the right rotY degrees
-      final double? rotZ = face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
-
-      // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
-      // eyes, cheeks, and nose available):
-      final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
-      if (leftEar != null) {
-        final Point<int> leftEarPos = leftEar.position;
-      }
-
-      // If classification was enabled with FaceDetectorOptions:
-      if (face.smilingProbability != null) {
-        final double? smileProb = face.smilingProbability;
-      }
-
-      // If face tracking was enabled with FaceDetectorOptions:
-      if (face.trackingId != null) {
-        final int? id = face.trackingId;
-      }  
-*/
 
   //TODO remove rotation of camera images
   removeRotation(File inputImage) async {
@@ -194,17 +157,17 @@ class _HomePageState extends State<RegistrationScreen> {
       ),
     );
   }
-
   //TODO draw rectangles
   var image;
   drawRectangleAroundFaces() async {
+    image = await _image?.readAsBytes();
+    image = await decodeImageFromList(image);
     print("${image.width}   ${image.height}");
     setState(() {
       image;
       faces;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
