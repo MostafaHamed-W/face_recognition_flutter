@@ -256,7 +256,7 @@ class _HomePageState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Card(
-                  color: ColorsManager.thirddBlueColor,
+                  color: ColorsManager.buttonsColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -270,7 +270,7 @@ class _HomePageState extends State<RegistrationScreen> {
                   ),
                 ),
                 Card(
-                  color: ColorsManager.thirddBlueColor,
+                  color: ColorsManager.buttonsColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {

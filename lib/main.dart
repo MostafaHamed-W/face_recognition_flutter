@@ -1,3 +1,4 @@
+import 'package:face_recognition/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'features/home/HomeScreen.dart';
 
@@ -9,6 +10,7 @@ void main() async {
     const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
+      
     ),
     // const CameraApp(),
   );

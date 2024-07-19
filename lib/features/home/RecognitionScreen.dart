@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:face_recognition/core/ML/Recognition.dart';
 import 'package:face_recognition/core/ML/Recognizer.dart';
+import 'package:face_recognition/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
@@ -261,6 +262,7 @@ class _HomePageState extends State<RecognitionScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Card(
+                  color: ColorsManager.buttonsColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -269,11 +271,12 @@ class _HomePageState extends State<RecognitionScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.image, color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.image, color: Colors.white, size: screenWidth / 7),
                     ),
                   ),
                 ),
                 Card(
+                  color: ColorsManager.buttonsColor,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(200))),
                   child: InkWell(
                     onTap: () {
@@ -282,7 +285,7 @@ class _HomePageState extends State<RecognitionScreen> {
                     child: SizedBox(
                       width: screenWidth / 2 - 70,
                       height: screenWidth / 2 - 70,
-                      child: Icon(Icons.camera, color: Colors.blue, size: screenWidth / 7),
+                      child: Icon(Icons.camera, color: Colors.white, size: screenWidth / 7),
                     ),
                   ),
                 )
