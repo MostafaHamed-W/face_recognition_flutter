@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:face_recognition/core/ML/Recognition.dart';
 import 'package:face_recognition/core/ML/Recognizer.dart';
 import 'package:face_recognition/core/theming/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
@@ -88,7 +85,7 @@ class _HomePageState extends State<RecognitionScreen> {
 
       //TODO crop face
       final bytes = _image!.readAsBytesSync(); //await File(cropedFace!.path).readAsBytes();
-      img.Image? faceImg = img.decodeImage(bytes!);
+      img.Image? faceImg = img.decodeImage(bytes);
       img.Image faceImg2 =
           img.copyCrop(faceImg!, x: left.toInt(), y: top.toInt(), width: width.toInt(), height: height.toInt());
 
@@ -103,7 +100,7 @@ class _HomePageState extends State<RecognitionScreen> {
 
   //TODO remove rotation of camera images
   removeRotation(File inputImage) async {
-    final img.Image? capturedImage = img.decodeImage(await File(inputImage!.path).readAsBytes());
+    final img.Image? capturedImage = img.decodeImage(await File(inputImage.path).readAsBytes());
     final img.Image orientedImage = img.bakeOrientation(capturedImage!);
     return await File(_image!.path).writeAsBytes(img.encodeJpg(orientedImage));
   }
@@ -176,7 +173,6 @@ class _HomePageState extends State<RecognitionScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color(0xff101018),

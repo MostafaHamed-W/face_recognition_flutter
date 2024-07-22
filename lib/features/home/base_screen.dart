@@ -3,8 +3,6 @@ import 'package:face_recognition/core/utils/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import '../image/recognition_screen.dart';
-import '../image/registration_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
