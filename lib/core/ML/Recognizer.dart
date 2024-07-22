@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../DB/DatabaseHelper.dart';
-import '../../features/home/HomeScreen.dart';
+import '../../features/home/base_screen.dart';
 import 'Recognition.dart';
 
 class Recognizer {
