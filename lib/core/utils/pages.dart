@@ -6,10 +6,13 @@ import 'package:face_recognition/features/realtime/realtime_face_recognition.dar
 import 'package:flutter/material.dart';
 
 class Pages {
-  static List<Widget> pages = const [
-    HomeScreen(),
-    RegistrationScreen(),
-    RecognitionScreen(),
+  static List<Widget> pages = [
+    const HomeScreen(),
+    const RegistrationScreen(),
+    const RecognitionScreen(),
+    // RealtimeFaceDetection(
+    //   title: 'detection',
+    // ),
     RealtimeFaceRecognition(),
   ];
 }
