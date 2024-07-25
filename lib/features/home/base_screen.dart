@@ -71,6 +71,14 @@ class _BaseScreenState extends State<BaseScreen> {
               ),
               backgroundColor: ColorsManager.botttomNavBarColor,
             ),
+            BottomNavigationBarItem(
+              label: 'Faces',
+              icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedManager,
+                color: _selectedIndex == 4 ? ColorsManager.activeIconColor : ColorsManager.inActiveIconColor,
+              ),
+              backgroundColor: ColorsManager.botttomNavBarColor,
+            ),
           ],
         ),
       ),

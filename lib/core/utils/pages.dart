@@ -1,7 +1,7 @@
+import 'package:face_recognition/features/home/registered_faces_screen.dart';
 import 'package:face_recognition/features/image/recognition_screen.dart';
 import 'package:face_recognition/features/image/registration_screen.dart';
 import 'package:face_recognition/features/home/home_screen.dart';
-import 'package:face_recognition/features/realtime/realtime_face_detection.dart';
 import 'package:face_recognition/features/realtime/realtime_face_recognition.dart';
 import 'package:flutter/material.dart';
 
@@ -14,5 +14,6 @@ class Pages {
     //   title: 'detection',
     // ),
     RealtimeFaceRecognition(),
+    const RegisteredFacesScreen()
   ];
 }
