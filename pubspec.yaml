@@ -61,7 +61,7 @@ flutter_native_splash:
 # The following section is specific to Flutter packages.
 flutter:
   fonts:
-    - family: bold
+    - family: inter
       fonts:
         - asset: assets/fonts/Inter-ExtraBold.ttf
   #         style: italic
