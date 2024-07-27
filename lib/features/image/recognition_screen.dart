@@ -175,7 +175,7 @@ class _HomePageState extends State<RecognitionScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xff101018),
+      backgroundColor: ColorsManager.baseBlueColor,
       resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -174,7 +174,7 @@ class _HomePageState extends State<RegistrationScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xff101018),
+      backgroundColor: ColorsManager.baseBlueColor,
       resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,7 +202,7 @@ class _HomePageState extends State<RegistrationScreen> {
               : Container(
                   margin: const EdgeInsets.only(top: 100),
                   child: Image.asset(
-                    "assets/images/logo.png",
+                    "assets/images/home.png",
                     width: screenWidth - 100,
                     height: screenWidth - 100,
                   ),
